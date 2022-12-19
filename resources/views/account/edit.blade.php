@@ -17,7 +17,7 @@
         <label for="exampleInputEmail1">Địa chỉ</label>
         <input name="address" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập địa chỉ mới" value="{{ $user->address }}">
     </div>
-    <button type="submit" class="btn btn-primary confirm">Submit</button>
+    <div id="edit" class="d-flex justify-content-center"><button type="submit" class="btn btn-primary confirm">Cập nhật</button></div>
 </form>
 </div>
 @endsection

@@ -18,19 +18,16 @@
         <input name="address" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Nhập địa chỉ mới" value="{{ $user->address }}">
     </div>
     <div class="form-group">
-        <label for="exampleInputPassword1">Mật khẩu cũ</label>
-        <input name="password_old" type="password" class="form-control" id="exampleInputPassword1" placeholder="Nhập mật khẩu cũ">
-    </div>
-    <div class="form-group">
-        <label for="exampleInputPassword1">Mật khẩu mới</label>
-        <input name="password_new1" type="password" class="form-control" id="exampleInputPassword1" placeholder="Nhập mật khẩu mới">
-    </div>
-    <div class="form-group">
-        <label for="exampleInputPassword1">Xác nhận nật khẩu mới</label>
-        <input name="password_new2" type="password" class="form-control" id="exampleInputPassword1" placeholder="Nhập lại mật khẩu mới">
+        <label for="exampleInputEmail1">Chức vụ</label>
+        <select class="btn btn-primary dropdown-toggle dropdown-toggle-split mx-5" name="isadmin">
+            
+            <option value="0" {{ ( $user->isAdmin == 0) ? 'selected' : '' }} >Thành viên</option>
+            <option value="1" {{ ( $user->isAdmin == 1) ? 'selected' : '' }} >Quản trị</option>
+            
+        </select>
     </div>
     
-    <button type="submit" class="btn btn-primary">Submit</button>
+    <button type="submit" id="edit" class="btn btn-primary confirm">Cập nhật</button>
 </form>
 </div>
 @endsection

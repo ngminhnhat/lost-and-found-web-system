@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ItemType;
 use App\Models\Post;
 use App\Models\PostType;
+use App\Models\RejectMessage;
+use App\Models\Report;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class AdminController extends Controller
@@ -16,8 +21,31 @@ class AdminController extends Controller
      */
     public function index()
     {
-        $listPost = Post::with('post_type', 'item_type', 'user')->orderBy('created_at','DESC')->get();
-        return view('admin.index', ['listPost' => $listPost]);
+        $postList = Post::with('user')->where('status',0)->orderBy('created_at','DESC')->get();
+        $reportList = Report::with('post')->get();
+        return view('admin.indexcontent', ['postList' => $postList,'reportList'=>$reportList]);
+    }
+    public function indexAccount()
+    {
+        $listUser = User::all()->except(Auth::id());
+        return view('admin.account.index', ['listUser' => $listUser]);
+    }
+    public function indexPost()
+    {
+        $itemTypeList = ItemType::all();
+        $postTypeList = PostType::all();
+        $postList = Post::with('post_type', 'item_type', 'user')->orderBy('created_at','DESC')->get();
+        return view('admin.post.index', ['postList' => $postList, 'postTypeList' => $postTypeList, 'itemTypeList' => $itemTypeList]);
+    }
+    public function indexPostType()
+    {
+        $postListType = PostType::all();
+        return view('admin.post_type.index', ['postListType' => $postListType]);
+    }
+    public function indexItemType()
+    {
+        $listItemType = ItemType::all();
+        return view('admin.item_type.index', ['listItemType' => $listItemType]);
     }
 
     /**
@@ -41,6 +69,26 @@ class AdminController extends Controller
         //
     }
 
+    public function storePostType(Request $request)
+    {
+        $postType = PostType::create(['name' => $request->name]);
+        if($postType!=null){
+            toast('Thêm thành công!','success');
+            return redirect()->route('admin.loai-bai-viet.index');
+        }
+        Alert::error('Thất bại!', '');
+    }
+
+    public function storeItemType(Request $request)
+    {
+        $postType = ItemType::create(['name' => $request->name]);
+        if($postType!=null){
+            toast('Thêm thành công!','success');
+            return redirect()->route('admin.loai-do-vat.index');
+        }
+        Alert::error('Thất bại!', '');
+    }
+
     /**
      * Display the specified resource.
      *
@@ -58,9 +106,10 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function editUser($id)
     {
-        //
+        $user = User::find($id);
+        return view('admin.account.edit',compact('user'));
     }
 
     /**
@@ -75,6 +124,30 @@ class AdminController extends Controller
         //
     }
 
+    public function updatePostType(Request $request, $id)
+    {
+        $postType = PostType::find($id);
+        if ($postType != null) {
+            $postType->name = $request->name;
+            $postType->save();
+            toast('Cập nhật thành công!','success');
+            return redirect()->route('admin.loai-bai-viet.index');
+        }
+        Alert::error('Thất bại!', 'Loại bài viết đã không còn tồn tại hoặc lỗi hệ thống.');
+    }
+
+    public function updateItemType(Request $request, $id)
+    {
+        $itemType = ItemType::find($id);
+        if ($itemType != null) {
+            $itemType->name = $request->name;
+            $itemType->save();
+            toast('Cập nhật thành công!','success');
+            return redirect()->route('admin.loai-do-vat.index');
+        }
+        Alert::error('Thất bại!', 'Loại bài viết đã không còn tồn tại hoặc lỗi hệ thống.');
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -86,6 +159,28 @@ class AdminController extends Controller
         //
     }
 
+    public function destroyPostType($id)
+    {
+        $postType = PostType::find($id);
+        if($postType!=null){
+            $postType->destroy($id);
+            toast('Xoá thành công!','success');
+            return redirect()->route('admin.loai-bai-viet.index');
+        }
+        Alert::error('Thất bại!', 'Loại bài viết đã không còn tồn tại hoặc lỗi hệ thống.');
+    }
+
+    public function destroyItemType($id)
+    {
+        $itemType = ItemType::find($id);
+        if($itemType!=null){
+            $itemType->destroy($id);
+            toast('Xoá thành công!','success');
+            return redirect()->route('admin.loai-do-vat.index');
+        }
+        Alert::error('Thất bại!', 'Loại bài viết đã không còn tồn tại hoặc lỗi hệ thống.');
+    }
+
     public function accept_post(Request $request)
     {
         $post = Post::find($request->id);
@@ -93,10 +188,10 @@ class AdminController extends Controller
             $post->status = 1;
             $post->save();
             toast('Bài viết đã được chấp thuận!','success');
-            return redirect()->route('admin.index');
+            return redirect()->route('admin.bai-dang.index');
         }
         Alert::error('Thất bại!', 'Bài viết đã không còn tồn tại.');
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.bai-dang.index');
     }
     public function decline_post(Request $request)
     {
@@ -105,10 +200,33 @@ class AdminController extends Controller
         if ($post != null) {
             $post->status = -1;
             $post->save();
+            $rejectMsg = RejectMessage::create(['post_id' => $request->id,'message' => $request->message]);
             toast('Bài viết đã bị từ chối!','success');
-            return redirect()->route('admin.index');
+            return redirect()->route('admin.bai-dang.index');
         }
         Alert::error('Thất bại!', 'Bài viết đã không còn tồn tại.');
-        return redirect()->route('admin.index');
+        return redirect()->route('admin.bai-dang.index');
+    }
+    public function deactivated($id)
+    {
+        $user = User::find($id);
+        if($user != null){
+            $user->status = -1;
+            $user->save();
+            toast('Vô hiệu hoá tài khoản thành công!', 'success');
+            return redirect()->route('admin.tai-khoan.index');
+        }
+        Alert::error('Cập nhật thất bại!', 'Có lỗi xảy ra!');
+    }
+    public function activated($id)
+    {
+        $user = User::find($id);
+        if($user != null){
+            $user->status = 0;
+            $user->save();
+            toast('Cập nhật tài khoản thành công!', 'success');
+            return redirect()->route('admin.tai-khoan.index');
+        }
+        Alert::error('Cập nhật thất bại!', 'Có lỗi xảy ra!');
     }
 }

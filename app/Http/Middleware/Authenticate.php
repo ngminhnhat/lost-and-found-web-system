@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
+use Illuminate\Support\Facades\Auth;
 
 class Authenticate extends Middleware
 {
@@ -14,8 +15,17 @@ class Authenticate extends Middleware
      */
     protected function redirectTo($request)
     {
-        if (! $request->expectsJson()) {
-            return route('dang-nhap');
+        if (!$request->expectsJson()) {
+            return route('login');
+        }
+        if (Auth::user()->status == -1) {
+            Auth::logout();
+            session()->flush();
+            toast('Tài khoản đã bị vô hiệu hoá','error');
+            return route('trang-chu');
+        }
+        if (Auth::user()->isAdmin == 1) {
+            return route('admin.index');
         }
     }
 }

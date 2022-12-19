@@ -10,15 +10,82 @@
   <link rel="stylesheet" href="{{ url('/css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ url('/css/style.css') }}">
   <link rel="stylesheet" href="{{ url('/css/sb-admin-2.min.css') }}">
+  <link rel="stylesheet" href="{{ url('/css/bootstrap4/bootstrap.min.css') }}">
   <!-- Animate.style -->
   <link rel="stylesheet" href="{{ url('/css/animate.min.css') }}">
   <!-- Icon -->
   <link href="{{ url('/bootstrap-icons-1.9.1/bootstrap-icons.css') }}" rel="stylesheet">
+  <style>
+    .col-ting {
+      width: 15em;
+    }
+
+    .file-upload>.image-box {
+
+      height: 15em;
+      width: 15em;
+      background: #7e7e7e;
+      cursor: pointer;
+      overflow: hidden;
+    }
+
+    .image-box>img {
+      height: 100%;
+      display: none;
+    }
+
+    .image-box>p {
+      position: relative;
+      top: 45%;
+      color: #fff;
+    }
+  </style>
 
   <!-- custome style -->
 </head>
 
 <body>
+  <!--  -->
+  <div class="modal fade" id="addPostTypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Thêm loại bài viết</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          @include('admin.post_type.create')
+        </div>
+        <div class="modal-footer">
+          Sau khi thêm loại bài viết sẽ hiển thị trên hệ thống!
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  -->
+  <!--  -->
+  <div class="modal fade" id="addItemTypeModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Thêm loại đồ vật</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          @include('admin.item_type.create')
+        </div>
+        <div class="modal-footer">
+          Sau khi thêm loại đồ vật sẽ hiển thị trên hệ thống!
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--  -->
+  
   <!-- Navbar Start -->
   <div class="container-fluid sticky-top bg-dark bg-light-radial shadow-sm px-2 pe-lg-0">
     <nav class="navbar navbar-expand-lg bg-dark bg-light-radial navbar-dark py-3 py-lg-0">
@@ -32,22 +99,22 @@
         <div class="navbar-nav ms-auto py-0">
           <a href="{{ route('trang-chu') }}" class="nav-item nav-link active">Trang chủ</a>
           <a href="about.html" class="nav-item nav-link">About</a>
-          <a href="service.html" class="nav-item nav-link">Service</a>
+          @if(Auth::hasUser())
+          <a href="{{ route('admin.index') }}" class="nav-item nav-link">Trang cá nhân</a>
+          @endif
           <div class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
+            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Bài viết</a>
             <div class="dropdown-menu m-0">
-              <a href="project.html" class="dropdown-item">Our Project</a>
-              <a href="team.html" class="dropdown-item">The Team</a>
-              <a href="testimonial.html" class="dropdown-item">Testimonial</a>
-              <a href="blog.html" class="dropdown-item">Blog Grid</a>
-
+              <a href="{{ route('bai-dang.dang-bai') }}" class="dropdown-item">Đăng bài</a>
+              <a href="{{ route('bai-dang.index') }}" class="dropdown-item">Bài viết đã đăng lên hệ thống</a>
+              <a href="testimonial.html" class="dropdown-item">Bài viết cá nhân</a>
             </div>
           </div>
           @if(Auth::hasUser())
           <div class="nav-item justify-content-center align-items-center">
-            <p class="navbar-nav pt-2">Xin chào</p>
+            <p class="navbar-nav pt-2" style="color: white;">Xin chào</p>
             <a href="{{ route('admin.index') }}" class="nav-link pb-0 pt-0" style="font-size: 1.5rem">{{ Auth::user()->name }}</a>
-            <a href="{{ route('dang-xuat') }}" class="nav-link pb-0 pt-0" style="color: red;font-size: 1rem;">Đăng Xuất</a>
+            <a href="{{ route('dang-xuat') }}" class="nav-link pb-0 pt-0" id="logout" style="color: red;font-size: 1rem;">Đăng Xuất</a>
           </div>
           @else
           <a href="{{ route('dang-nhap') }}" class="nav-item nav-link">Đăng Nhập</a>
@@ -133,8 +200,12 @@
   <script src="{{ url('/js/bootstrap.bundle.min.js') }}"></script>
   <script src="{{ url('/js/sb-admin-2.min.min.js') }}"></script>
   <script src="{{ url('/jquery/jquery.min.js') }}"></script>
+  <script src="{{ url('/css/bootstrap4/bootstrap.min.js') }}"></script>
+  <script src="{{ url('/jquery/jquery312/jquery-3.2.1.slim.min.js') }}"></script>
   <!-- SweetAlert2 -->
   <script src="{{ url('/sweetalert2/dist/sweetalert2.all.min.js') }}"></script>
+  <!-- CKEditor -->
+  <script src="{{ url('/ckeditor5-build-classic/ckeditor.js') }}"></script>
   <script>
     //the confirm class that is being used in the delete button
     $('.confirm-approve').click(function(event) {
@@ -144,10 +215,36 @@
       //don't let the form submit yet
       event.preventDefault();
 
+
       //configure sweetalert alert as you wish
       Swal.fire({
         title: 'Bạn cơ muốn chấp thuận bài đăng này?',
         text: "Bài đăng sẽ được chấp thuận và sẽ hiển thị lên trang web!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý!',
+        cancelButtonText: "Huỷ bỏ!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      })
+
+    });
+    $('.confirm-complete').click(function(event) {
+      //This will choose the closest form to the button
+      var form = $(this).closest("form");
+
+      //don't let the form submit yet
+      event.preventDefault();
+
+
+      //configure sweetalert alert as you wish
+      Swal.fire({
+        title: 'Bạn cơ muốn đánh dấu bài đăng đã hoàn tất này?',
+        text: "Bài đăng sẽ được đánh dấu hoàn tất sẽ ngừng hiển thị lên trang web!",
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
@@ -185,6 +282,134 @@
       })
 
     });
+    $('.confirm-deactive').click(function(event) {
+      //This will choose the closest form to the button
+      var form = $(this).closest("form");
+
+      //don't let the form submit yet
+      event.preventDefault();
+
+      //configure sweetalert alert as you wish
+      Swal.fire({
+        title: 'Bạn có muốn vô hiệu hoá tài khoản này?',
+        text: "Tài khoản sẽ bị vô hiệu hoá và không thể đăng nhập vào trang web!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý!',
+        cancelButtonText: "Huỷ bỏ!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      })
+
+    });
+    $('.confirm-active').click(function(event) {
+      //This will choose the closest form to the button
+      var form = $(this).closest("form");
+
+      //don't let the form submit yet
+      event.preventDefault();
+
+      //configure sweetalert alert as you wish
+      Swal.fire({
+        title: 'Bạn có muốn cho phép tài khoản này hoạt động?',
+        text: "Tài khoản sẽ hoạt động trở lại và có thể đăng nhập vào trang web!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý!',
+        cancelButtonText: "Huỷ bỏ!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+      })
+
+    });
+
+    $('#logout').click(function(event) {
+      event.preventDefault();
+      Swal.fire({
+        title: 'Đăng xuất?',
+        text: "Tài khoản sẽ kết thúc phiên đăng nhập!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý!',
+        cancelButtonText: "Huỷ bỏ!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.replace("{{ route('dang-xuat') }}");
+        }
+
+      })
+
+    });
+    $('#edit').click(function(event) {
+      var form = $(this).closest("form");
+      event.preventDefault();
+      Swal.fire({
+        title: 'Cập nhật thông tin?',
+        text: "Thông tin tài khoản này sẽ được cập nhật!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý!',
+        cancelButtonText: "Huỷ bỏ!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+
+      })
+
+    });
+    $('#edit-pass').click(function(event) {
+      var form = $(this).closest("form");
+      event.preventDefault();
+      Swal.fire({
+        title: 'Cập nhật mật khẩu?',
+        text: "Mật khẩu của tài khoản này sẽ được cập nhật!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý!',
+        cancelButtonText: "Huỷ bỏ!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+
+      })
+
+    });
+    $('#dialog').click(function(event) {
+      var form = $(this).closest("form");
+      event.preventDefault();
+      Swal.fire({
+        title: 'Bạn chắc chắn muốn thực hiện thao tác này?',
+        text: "Bạn sẽ không thể hoàn tác!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Đồng ý!',
+        cancelButtonText: "Huỷ bỏ!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          form.submit();
+        }
+
+      })
+
+    });
     // $('.confirm-decline').click(function(event) {
     //   //This will choose the closest form to the button
     //   var form = $(this).closest("form");
@@ -217,6 +442,37 @@
     //   })
 
     // });
+    ClassicEditor
+      .create(document.querySelector('#editor'), {
+        toolbar: ['bold', 'italic', 'link', 'undo', 'redo', 'numberedList', 'bulletedList']
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    $(".image-box").click(function(event) {
+      var previewImg = $(this).children("img");
+
+      $(this)
+        .siblings()
+        .children("input")
+        .trigger("click");
+
+      $(this)
+        .siblings()
+        .children("input")
+        .change(function() {
+          var reader = new FileReader();
+
+          reader.onload = function(e) {
+            var urll = e.target.result;
+            $(previewImg).attr("src", urll);
+            previewImg.parent().css("background", "transparent");
+            previewImg.show();
+            previewImg.siblings("p").hide();
+          };
+          reader.readAsDataURL(this.files[0]);
+        });
+    });
   </script>
   @include('sweetalert::alert')
 </body>

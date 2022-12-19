@@ -15,9 +15,9 @@
         </div>
         <div class="form-group">
             <label for="exampleInputPassword1">Xác nhận nật khẩu mới</label>
-            <input name="password_new_confirm" type="password" class="form-control" id="exampleInputPassword1" placeholder="Nhập lại mật khẩu mới">
+            <input name="password_new_confirmation" type="password" class="form-control" id="exampleInputPassword1" placeholder="Nhập lại mật khẩu mới">
         </div>
-        <button type="submit" class="btn btn-primary confirm">Cập nhật</button>
+        <button type="submit" class="btn btn-primary confirm" id="edit-pass">Cập nhật</button>
     </form>
 </div>
 @endsection

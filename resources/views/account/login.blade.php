@@ -15,21 +15,24 @@
                         <div class="col-lg-6">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                                    <h1 class="h4 text-gray-900 mb-4">Xin chào!</h1>
+                                    <h6>Vui lòng nhập thông tin cần thiết để đăng nhập.</h6>
                                 </div>
                                 <form class="user" method="POST" action="{{ route('xu-li-dang-nhap') }}">
                                     @csrf
                                     <div class="form-group">
+                                        <label for="">Tên Email:</label>
                                         <input type="email" name="email" class="form-control" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Địa chỉ Email...">
+                                        @error('email')
+                                        <p style="color: red;">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                     <div class="form-group">
+                                        <label for="">Mật khẩu:</label>
                                         <input type="password" name="password" class="form-control" id="exampleInputPassword" placeholder="Mật khẩu">
-                                    </div>
-                                    <div class="form-group">
-                                        <div class="custom-control custom-checkbox small">
-                                            <input type="checkbox" class="custom-control-input" id="customCheck">
-                                            <label class="custom-control-label" for="customCheck">Remember Me</label>
-                                        </div>
+                                        @error('password')
+                                        <p style="color: red;">{{ $message }}</p>
+                                        @enderror
                                     </div>
                                     <button type="submit" class="btn btn-primary btn-user btn-block">Đăng nhập</button>
                                     <hr>

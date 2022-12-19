@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreatePostRequest;
 use App\Models\ItemType;
 use App\Models\Post;
 use App\Models\PostType;
+use App\Models\RejectMessage;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class PostController extends Controller
 {
@@ -18,8 +21,10 @@ class PostController extends Controller
      */
     public function index()
     {
-        $postList = Post::where('status','1')->orderBy('created_at','DESC')->get();
-        return view('post.index', compact('postList'));
+        $itemTypeList = ItemType::all();
+        $postTypeList = PostType::all();
+        $postList = Post::where('status', '1')->orderBy('created_at', 'DESC')->get();
+        return view('post.index', ['postList' => $postList, 'postTypeList' => $postTypeList, 'itemTypeList' => $itemTypeList]);
     }
 
     /**
@@ -40,8 +45,9 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreatePostRequest $request)
     {
+
         $post = Post::create([
             "user_id" => Auth::user()->id,
             "title" => $request->title,
@@ -50,22 +56,48 @@ class PostController extends Controller
             "found_address" => $request->found_address,
             "content" => $request->content,
         ]);
-        if($request->hasFile('image_1')){
-
+        if ($request->hasFile('image_1')) {
+            $file = $request->image_1;
+            $filename = Carbon::now()->format('YmdHisu');
+            $fileExtension = $file->getClientOriginalExtension();
+            $storename = $filename . '.' . $fileExtension;
+            $file->storeAs('PostImage', $storename);
+            $post->image_1 = $storename;
         }
-        if($request->hasFile('image_2')){
-            
+        if ($request->hasFile('image_2')) {
+            $file = $request->image_2;
+            $filename = Carbon::now()->format('YmdHisu');
+            $fileExtension = $file->getClientOriginalExtension();
+            $storename = $filename . '.' . $fileExtension;
+            $file->storeAs('PostImage', $storename);
+            $post->image_2 = $storename;
         }
-        if($request->hasFile('image_3')){
-            
+        if ($request->hasFile('image_3')) {
+            $file = $request->image_3;
+            $filename = Carbon::now()->format('YmdHisu');
+            $fileExtension = $file->getClientOriginalExtension();
+            $storename = $filename . '.' . $fileExtension;
+            $file->storeAs('PostImage', $storename);
+            $post->image_3 = $storename;
         }
-        if($request->hasFile('image_4')){
-            
+        if ($request->hasFile('image_4')) {
+            $file = $request->image_4;
+            $filename = Carbon::now()->format('YmdHisu');
+            $fileExtension = $file->getClientOriginalExtension();
+            $storename = $filename . '.' . $fileExtension;
+            $file->storeAs('PostImage', $storename);
+            $post->image_4 = $storename;
         }
-        if($request->hasFile('image_5')){
-            
+        if ($request->hasFile('image_5')) {
+            $file = $request->image_5;
+            $filename = Carbon::now()->format('YmdHisu');
+            $fileExtension = $file->getClientOriginalExtension();
+            $storename = $filename . '.' . $fileExtension;
+            $file->storeAs('PostImage', $storename);
+            $post->image_5 = $storename;
         }
         $post->save();
+        toast('Thêm thành công!','success');
         return redirect()->route('tai-khoan.index');
     }
 
@@ -77,11 +109,20 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::find($id);
-        $postType = PostType::find($post->post_type_id);
-        $itemType = ItemType::find($post->item_type_id);
-        $user = User::find($post->user_id);
-        return view('post.show', ['post' => $post, 'postType' => $postType, 'itemType' => $itemType, 'user' => $user]);
+        $post = Post::with('post_type', 'item_type', 'user')->find($id);
+        
+        $rejectMsg = new RejectMessage();
+        if($post->status == -1){
+            $rejectMsg = null;
+            $rejectMsg = RejectMessage::where('post_id',$id)->first();
+        }
+        if(Auth::check()){
+            return view('post.show', ['post' => $post,'rejectMsg' => $rejectMsg]);
+        }
+        if ($post->status == 1) {
+            return view('post.show', ['post' => $post,'rejectMsg' => $rejectMsg]);
+        }
+        return redirect()->route('trang-chu');
     }
 
     /**
@@ -116,5 +157,59 @@ class PostController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function searchGlobal(Request $request)
+    {
+        $itemTypeList = ItemType::all();
+        $postTypeList = PostType::all();
+        $post = Post::query();
+        if ($request->title != null) {
+            $post->where('title', 'LIKE', '%' . $request->title . '%');
+        };
+        if ($request->post_type_id != null) {
+            $post->where('post_type_id', $request->post_type_id);
+        };
+        if ($request->item_type_id != null) {
+            $post->where('item_type_id', $request->item_type_id);
+        };
+        if ($request->order != null) {
+            if ($request->order == 0) {
+                $post->orderBy('created_at', 'DESC');
+            } elseif ($request->order == 1) {
+                $post->orderBy('created_at');
+            }
+        };
+        $postList = $post->get();
+        return view('post.index', ['postList' => $postList, 'postTypeList' => $postTypeList, 'itemTypeList' => $itemTypeList]);
+    }
+
+    public function searchAdmin(Request $request)
+    {
+        $itemTypeList = ItemType::all();
+        $postTypeList = PostType::all();
+        $post = Post::query();
+        $post->with('post_type', 'item_type', 'user');
+        if ($request->title != null) {
+            $post->where('title', 'LIKE', '%' . $request->title . '%');
+        };
+        if ($request->post_type_id != null) {
+            $post->where('post_type_id', $request->post_type_id);
+        };
+        if ($request->item_type_id != null) {
+            $post->where('item_type_id', $request->item_type_id);
+        };
+        if ($request->status != null) {
+            $post->where('status', $request->status);
+        };
+        if ($request->order != null) {
+            if ($request->order == 0) {
+                $post->orderBy('created_at', 'DESC');
+            } elseif ($request->order == 1) {
+                $post->orderBy('created_at');
+            }
+        };
+        $postList = $post->get();
+        return view('admin.post.index', ['postList' => $postList, 'postTypeList' => $postTypeList, 'itemTypeList' => $itemTypeList]);
     }
 }

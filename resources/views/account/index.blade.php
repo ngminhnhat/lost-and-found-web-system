@@ -9,7 +9,7 @@
     <ul class="navbar-nav bg-dark bg-light-radial sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+        <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{ route('tai-khoan.index') }}">
             <div class="sidebar-brand-icon rotate-n-15">
                 <i class="fas fa-laugh-wink"></i>
             </div>
@@ -32,64 +32,42 @@
 
         <!-- Heading -->
         <div class="sidebar-heading">
-            Quản lí tài khoản
+            Cá nhân
         </div>
-
-        <!-- Nav Item - Utilities Collapse Menu -->
-        <div class="nav-item dropdown">
-        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Chi tiết tài khoản</a>
-        </div>
-
-        <div class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Chỉnh sửa tài khoản</a>
-            <div class="dropdown-menu m-0">
-                <a href="{{ route('tai-khoan.cap-nhat',['id'=>Auth::user()->id]) }}" class="dropdown-item">Thay đổi thông tin</a>
-                <a href="{{ route('tai-khoan.doi-mat-khau',['id'=>Auth::user()->id]) }}" class="dropdown-item">Thay đổi mật khẩu</a>
-
+        <!--  -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ route('tai-khoan.cap-nhat',['id'=>Auth::user()->id]) }}" data-toggle="collapse" data-target="#collapse1" aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Quản lí tài khoản</span>
+            </a>
+            <div id="collapse1" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <a class="collapse-item" href="{{ route('tai-khoan.chi-tiet',['id'=>Auth::user()->id]) }}">Thông tin tài khoản</a>
+                    <a class="collapse-item" href="{{ route('tai-khoan.cap-nhat',['id'=>Auth::user()->id]) }}">Chỉnh sửa thông tin</a>
+                    <a class="collapse-item" href="{{ route('tai-khoan.doi-mat-khau',['id'=>Auth::user()->id]) }}">Thay đổi mật khẩu</a>
+                </div>
             </div>
-        </div>
+        </li>
+        <!--  -->
 
         <!-- Divider -->
         <hr class="sidebar-divider">
 
-        <!-- Heading -->
-        <div class="sidebar-heading">
-            Addons
-        </div>
-
-        <!-- Nav Item - Pages Collapse Menu -->
+        <!--  -->
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true" aria-controls="collapsePages">
-                <i class="fas fa-fw fa-folder"></i>
-                <span>Pages</span>
+            <a class="nav-link collapsed" href="{{ route('tai-khoan.cap-nhat',['id'=>Auth::user()->id]) }}" data-toggle="collapse" data-target="#collapse2" aria-expanded="true" aria-controls="collapseTwo">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Quản lí bài viết</span>
             </a>
-            <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+            <div id="collapse2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <h6 class="collapse-header">Login Screens:</h6>
-                    <a class="collapse-item" href="login.html">Login</a>
-                    <a class="collapse-item" href="register.html">Register</a>
-                    <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
-                    <div class="collapse-divider"></div>
-                    <h6 class="collapse-header">Other Pages:</h6>
-                    <a class="collapse-item" href="404.html">404 Page</a>
-                    <a class="collapse-item" href="blank.html">Blank Page</a>
+                    <a class="collapse-item" href="{{ route('tai-khoan.bai-dang.index') }}">Danh sách bài viết</a>
                 </div>
             </div>
         </li>
+        <!--  -->
 
-        <!-- Nav Item - Charts -->
-        <li class="nav-item">
-            <a class="nav-link" href="charts.html">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Charts</span></a>
-        </li>
-
-        <!-- Nav Item - Tables -->
-        <li class="nav-item">
-            <a class="nav-link" href="tables.html">
-                <i class="fas fa-fw fa-table"></i>
-                <span>Tables</span></a>
-        </li>
+        
 
         <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block">
@@ -101,9 +79,8 @@
 
         <!-- Sidebar Message -->
         <div class="sidebar-card d-none d-lg-flex">
-            <img class="sidebar-card-illustration mb-2" src="img/undraw_rocket.svg" alt="...">
-            <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
-            <a class="btn btn-success btn-sm" href="https://startbootstrap.com/theme/sb-admin-pro">Upgrade to Pro!</a>
+            <p class="text-center mb-2"><strong>Lost And Found Web System</strong> by Nguyen Minh Nhat</p>
+            <a class="btn btn-success btn-sm" href="https://github.com/ngminhnhat/lost-and-found-web-system">Github</a>
         </div>
 
     </ul>
@@ -303,48 +280,59 @@
             <!-- End of Topbar -->
 
             <!-- Begin Page Content -->
-            <div class="container-fluid">
+            <div>
+                <div class="container-fluid">
 
-                <!-- Page Heading -->
-                <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                    <h1 class="h3 mb-0 text-gray-800 text-uppercase">Bài Đăng</h1>
-                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-                </div>
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800 text-uppercase">Bài Đăng</h1>
+                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                    </div>
 
-                <!-- Content Row -->
-                <div class="col">
+                    <!-- Content Row -->
+                    <div class="col">
 
-                    <!-- Pending post -->
-                    <div class="mb-4">
-                        <div class="card border-left-primary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                            <h6 class="mb-0 font-weight-bold text-primary text-uppercase">Đang chờ duyệt</h6>
-                                            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Xem thêm...</a>
-                                        </div>
-                                        <!-- Bai viet -->
-                                        @foreach($postList as $post)
-                                        @if($post->status == 0)
-                                        <div class="col-xl-3 col-lg-4 col-md-6 row">
-                                            <a href="{{ route('bai-dang.chi-tiet',['id'=>$post->id]) }}">
-                                                <div class="row">
-                                                    <div class="col-10" style="min-height: 200px;">
-                                                        <div class="position-relative h-100">
-                                                            <img class="position-absolute w-100 h-100" src="{{ url('/web-images/nhat-do.jpg') }}" style="object-fit: cover;">
+                        <!-- Pending post -->
+                        <div class="mb-4">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="row mr-2">
+                                            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                                <h6 class="mb-0 font-weight-bold text-primary text-uppercase">Đang chờ duyệt</h6>
+                                                <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Xem thêm...</a>
+                                            </div>
+                                            <!-- Bai viet -->
+
+                                            @for($i = 0;$i < 4 && $i < count($postList0) ;$i ++) <div class="col-xl-3 col-lg-4 col-md-6 row d-flex">
+                                                <a href="{{ route('bai-dang.chi-tiet',['id'=>$postList0[$i]->id]) }}">
+                                                    <div class="row">
+                                                        <div class="col-10" style="min-height: 200px;">
+                                                            <div class="position-relative h-100">
+                                                                @if($postList0[$i]->image_1 != null)
+                                                                <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList0[$i]->image_1) }}" style="object-fit: cover;">
+                                                                @elseif($postList0[$i]->image_2 != null)
+                                                                <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList0[$i]->image_2) }}" style="object-fit: cover;">
+                                                                @elseif($postList0[$i]->image_3 != null)
+                                                                <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList0[$i]->image_3) }}" style="object-fit: cover;">
+                                                                @elseif($postList0[$i]->image_4 != null)
+                                                                <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList0[$i]->image_4) }}" style="object-fit: cover;">
+                                                                @elseif($postList0[$i]->image_5 != null)
+                                                                <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList0[$i]->image_5) }}" style="object-fit: cover;">
+                                                                @else
+                                                                <img class="position-absolute w-100 h-100" src="{{ url('/web-images/nhat-do.jpg') }}" style="object-fit: cover;">
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <div class="p-1">
+                                                                <h4 class="text-uppercase">{{ $postList0[$i]->title }}</h4>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-12">
-                                                        <div class="p-1">
-                                                            <h4 class="text-uppercase">{{ $post->title }}</h4>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </a>
+                                                </a>
                                         </div>
-                                        @endif
-                                        @endforeach
+                                        @endfor
                                         <!-- Bai viet -->
                                     </div>
                                     <div class="col-auto">
@@ -360,361 +348,174 @@
                         <div class="card border-left-success shadow h-100 py-2">
                             <div class="card-body">
                                 <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
+                                    <div class="row mr-2">
                                         <div class="d-sm-flex align-items-center justify-content-between mb-4">
                                             <h6 class="mb-0 font-weight-bold text-success text-uppercase">Đã đăng</h6>
                                             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-success shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Xem thêm...</a>
                                         </div>
                                         <!-- Bai viet -->
-                                        @foreach($postList as $post)
-                                        @if($post->status == 1)
-                                        <div class="col-xl-3 col-lg-4 col-md-6 row">
-                                            <a href="{{ route('bai-dang.chi-tiet',['id'=>$post->id]) }}">
+                                        @for($i = 0;$i < 4 && $i < count($postList1) ;$i ++) <div class="col-xl-3 col-lg-4 col-md-6 row d-flex">
+                                            <a href="{{ route('bai-dang.chi-tiet',['id'=>$postList1[$i]->id]) }}">
                                                 <div class="row">
                                                     <div class="col-10" style="min-height: 200px;">
                                                         <div class="position-relative h-100">
+                                                            @if($postList1[$i]->image_1 != null)
+                                                            <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList1[$i]->image_1) }}" style="object-fit: cover;">
+                                                            @elseif($postList1[$i]->image_2 != null)
+                                                            <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList1[$i]->image_2) }}" style="object-fit: cover;">
+                                                            @elseif($postList1[$i]->image_3 != null)
+                                                            <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList1[$i]->image_3) }}" style="object-fit: cover;">
+                                                            @elseif($postList1[$i]->image_4 != null)
+                                                            <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList1[$i]->image_4) }}" style="object-fit: cover;">
+                                                            @elseif($postList1[$i]->image_5 != null)
+                                                            <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList1[$i]->image_5) }}" style="object-fit: cover;">
+                                                            @else
                                                             <img class="position-absolute w-100 h-100" src="{{ url('/web-images/nhat-do.jpg') }}" style="object-fit: cover;">
+                                                            @endif
                                                         </div>
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="p-1">
-                                                            <h4 class="text-uppercase">{{ $post->title }}</h4>
+                                                            <h4 class="text-uppercase">{{ $postList1[$i]->title }}</h4>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </a>
-                                        </div>
-                                        @endif
-                                        @endforeach
-                                        <!-- Bai viet -->
                                     </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                    </div>
+                                    @endfor
+                                    <!-- Bai viet -->
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Approved post -->
-
-
-                    <!-- Complete post -->
-                    <div class="mb-4">
-                        <div class="card border-left-secondary shadow h-100 py-2">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                            <h6 class="mb-0 font-weight-bold text-secondary text-uppercase">Hoàn tất</h6>
-                                            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Xem thêm...</a>
-                                        </div>
-                                        <!-- Bai viet -->
-                                        @foreach($postList as $post)
-                                        @if($post->status == 2)
-                                        <div class="col-xl-3 col-lg-4 col-md-6 row">
-                                            <a href="{{ route('bai-dang.chi-tiet',['id'=>$post->id]) }}">
-                                                <div class="row">
-                                                    <div class="col-10" style="min-height: 200px;">
-                                                        <div class="position-relative h-100">
-                                                            <img class="position-absolute w-100 h-100" src="{{ url('/web-images/nhat-do.jpg') }}" style="object-fit: cover;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="p-1">
-                                                            <h4 class="text-uppercase">{{ $post->title }}</h4>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        @endif
-                                        @endforeach
-                                        <!-- Bai viet -->
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Complete post -->
-
-
-                    <!-- Reject post -->
-                    <div class="mb-4">
-                        <div class="card border-left-danger shadow h-100 py-2" style="background-color:#80808014">
-                            <div class="card-body">
-                                <div class="row no-gutters align-items-center">
-                                    <div class="col mr-2">
-                                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                                            <h6 class="mb-0 font-weight-bold text-danger text-uppercase">Bị từ chối</h6>
-                                            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Xem thêm...</a>
-                                        </div>
-                                        <!-- Bai viet -->
-                                        @foreach($postList as $post)
-                                        @if($post->status == -1)
-                                        <div class="col-xl-3 col-lg-4 col-md-6 row">
-                                            <a href="{{ route('bai-dang.chi-tiet',['id'=>$post->id]) }}">
-                                                <div class="row">
-                                                    <div class="col-10" style="min-height: 200px;">
-                                                        <div class="position-relative h-100">
-                                                            <img class="position-absolute w-100 h-100" src="{{ url('/web-images/nhat-do.jpg') }}" style="object-fit: cover;">
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="p-1">
-                                                            <h4 class="text-uppercase">{{ $post->title }}</h4>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </a>
-                                        </div>
-                                        @endif
-                                        @endforeach
-                                        <!-- Bai viet -->
-                                    </div>
-                                    <div class="col-auto">
-                                        <i class="fas fa-calendar fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Reject post -->
-                </div>
-
-                <!-- Content Row -->
-
-                <div class="row">
-
-                    <!-- Area Chart -->
-                    <div class="col-xl-8 col-lg-7">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
-                                <div class="dropdown no-arrow">
-                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                                        <div class="dropdown-header">Dropdown Header:</div>
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-area">
-                                    <canvas id="myAreaChart"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Pie Chart -->
-                    <div class="col-xl-4 col-lg-5">
-                        <div class="card shadow mb-4">
-                            <!-- Card Header - Dropdown -->
-                            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
-                                <div class="dropdown no-arrow">
-                                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
-                                        <div class="dropdown-header">Dropdown Header:</div>
-                                        <a class="dropdown-item" href="#">Action</a>
-                                        <a class="dropdown-item" href="#">Another action</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Something else here</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Card Body -->
-                            <div class="card-body">
-                                <div class="chart-pie pt-4 pb-2">
-                                    <canvas id="myPieChart"></canvas>
-                                </div>
-                                <div class="mt-4 text-center small">
-                                    <span class="mr-2">
-                                        <i class="fas fa-circle text-primary"></i> Direct
-                                    </span>
-                                    <span class="mr-2">
-                                        <i class="fas fa-circle text-success"></i> Social
-                                    </span>
-                                    <span class="mr-2">
-                                        <i class="fas fa-circle text-info"></i> Referral
-                                    </span>
+                                <div class="col-auto">
+                                    <i class="fas fa-calendar fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <!-- Approved post -->
 
-                <!-- Content Row -->
-                <div class="row">
 
-                    <!-- Content Column -->
-                    <div class="col-lg-6 mb-4">
-
-                        <!-- Project Card Example -->
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                <!-- Complete post -->
+                <div class="mb-4">
+                    <div class="card border-left-secondary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="row mr-2">
+                                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                        <h6 class="mb-0 font-weight-bold text-secondary text-uppercase">Hoàn tất</h6>
+                                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-secondary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Xem thêm...</a>
+                                    </div>
+                                    <!-- Bai viet -->
+                                    @for($i = 0;$i < 4 && $i < count($postList2) ;$i ++) <div class="col-xl-3 col-lg-4 col-md-6 row d-flex">
+                                        <a href="{{ route('bai-dang.chi-tiet',['id'=>$postList2[$i]->id]) }}">
+                                            <div class="row">
+                                                <div class="col-10" style="min-height: 200px;">
+                                                    <div class="position-relative h-100">
+                                                        @if($postList2[$i]->image_1 != null)
+                                                        <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList2[$i]->image_1) }}" style="object-fit: cover;">
+                                                        @elseif($postList2[$i]->image_2 != null)
+                                                        <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList2[$i]->image_2) }}" style="object-fit: cover;">
+                                                        @elseif($postList2[$i]->image_3 != null)
+                                                        <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList2[$i]->image_3) }}" style="object-fit: cover;">
+                                                        @elseif($postList2[$i]->image_4 != null)
+                                                        <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList2[$i]->image_4) }}" style="object-fit: cover;">
+                                                        @elseif($postList2[$i]->image_5 != null)
+                                                        <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList2[$i]->image_5) }}" style="object-fit: cover;">
+                                                        @else
+                                                        <img class="position-absolute w-100 h-100" src="{{ url('/web-images/nhat-do.jpg') }}" style="object-fit: cover;">
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                                <div class="col-12">
+                                                    <div class="p-1">
+                                                        <h4 class="text-uppercase">{{ $postList2[$i]->title }}</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                </div>
+                                @endfor
+                                <!-- Bai viet -->
                             </div>
-                            <div class="card-body">
-                                <h4 class="small font-weight-bold">Server Migration <span class="float-right">20%</span></h4>
-                                <div class="progress mb-4">
-                                    <div class="progress-bar bg-danger" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <h4 class="small font-weight-bold">Sales Tracking <span class="float-right">40%</span></h4>
-                                <div class="progress mb-4">
-                                    <div class="progress-bar bg-warning" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <h4 class="small font-weight-bold">Customer Database <span class="float-right">60%</span></h4>
-                                <div class="progress mb-4">
-                                    <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <h4 class="small font-weight-bold">Payout Details <span class="float-right">80%</span></h4>
-                                <div class="progress mb-4">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
-                                <h4 class="small font-weight-bold">Account Setup <span class="float-right">Complete!</span></h4>
-                                <div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                </div>
+                            <div class="col-auto">
+                                <i class="fas fa-calendar fa-2x text-gray-300"></i>
                             </div>
                         </div>
-
-                        <!-- Color System -->
-                        <div class="row">
-                            <div class="col-lg-6 mb-4">
-                                <div class="card bg-primary text-white shadow">
-                                    <div class="card-body">
-                                        Primary
-                                        <div class="text-white-50 small">#4e73df</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mb-4">
-                                <div class="card bg-success text-white shadow">
-                                    <div class="card-body">
-                                        Success
-                                        <div class="text-white-50 small">#1cc88a</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mb-4">
-                                <div class="card bg-info text-white shadow">
-                                    <div class="card-body">
-                                        Info
-                                        <div class="text-white-50 small">#36b9cc</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mb-4">
-                                <div class="card bg-warning text-white shadow">
-                                    <div class="card-body">
-                                        Warning
-                                        <div class="text-white-50 small">#f6c23e</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mb-4">
-                                <div class="card bg-danger text-white shadow">
-                                    <div class="card-body">
-                                        Danger
-                                        <div class="text-white-50 small">#e74a3b</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mb-4">
-                                <div class="card bg-secondary text-white shadow">
-                                    <div class="card-body">
-                                        Secondary
-                                        <div class="text-white-50 small">#858796</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mb-4">
-                                <div class="card bg-light text-black shadow">
-                                    <div class="card-body">
-                                        Light
-                                        <div class="text-black-50 small">#f8f9fc</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 mb-4">
-                                <div class="card bg-dark text-white shadow">
-                                    <div class="card-body">
-                                        Dark
-                                        <div class="text-white-50 small">#5a5c69</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="col-lg-6 mb-4">
-
-                        <!-- Illustrations -->
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Illustrations</h6>
-                            </div>
-                            <div class="card-body">
-                                <div class="text-center">
-                                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="img/undraw_posting_photo.svg" alt="...">
-                                </div>
-                                <p>Add some quality, svg illustrations to your project courtesy of <a target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a
-                                    constantly updated collection of beautiful svg images that you can use
-                                    completely free and without attribution!</p>
-                                <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on
-                                    unDraw &rarr;</a>
-                            </div>
-                        </div>
-
-                        <!-- Approach -->
-                        <div class="card shadow mb-4">
-                            <div class="card-header py-3">
-                                <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-                            </div>
-                            <div class="card-body">
-                                <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce
-                                    CSS bloat and poor page performance. Custom CSS classes are used to create
-                                    custom components and custom utility classes.</p>
-                                <p class="mb-0">Before working with this theme, you should become familiar with the
-                                    Bootstrap framework, especially the utility classes.</p>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
-
             </div>
-            <!-- /.container-fluid -->
+            <!-- Complete post -->
 
+
+            <!-- Reject post -->
+            <div class="mb-4">
+                <div class="card border-left-danger shadow h-100 py-2" style="background-color:#80808014">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="row mr-2">
+                                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                                    <h6 class="mb-0 font-weight-bold text-danger text-uppercase">Bị từ chối</h6>
+                                    <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-danger shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i> Xem thêm...</a>
+                                </div>
+                                <!-- Bai viet -->
+                                @for($i = 0;$i < 4 && $i < count($postList_1) ;$i ++) <div class="col-xl-3 col-lg-4 col-md-6 row d-flex">
+                                    <a href="{{ route('bai-dang.chi-tiet',['id'=>$postList_1[$i]->id]) }}">
+                                        <div class="row">
+                                            <div class="col-10" style="min-height: 200px;">
+                                                <div class="position-relative h-100">
+                                                    @if($postList_1[$i]->image_1 != null)
+                                                    <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList_1[$i]->image_1) }}" style="object-fit: cover;">
+                                                    @elseif($postList_1[$i]->image_2 != null)
+                                                    <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList_1[$i]->image_2) }}" style="object-fit: cover;">
+                                                    @elseif($postList_1[$i]->image_3 != null)
+                                                    <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList_1[$i]->image_3) }}" style="object-fit: cover;">
+                                                    @elseif($postList_1[$i]->image_4 != null)
+                                                    <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList_1[$i]->image_4) }}" style="object-fit: cover;">
+                                                    @elseif($postList_1[$i]->image_5 != null)
+                                                    <img class="position-absolute w-100 h-100" src="{{ url('/PostImage/'.$postList_1[$i]->image_5) }}" style="object-fit: cover;">
+                                                    @else
+                                                    <img class="position-absolute w-100 h-100" src="{{ url('/web-images/nhat-do.jpg') }}" style="object-fit: cover;">
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="p-1">
+                                                    <h4 class="text-uppercase">{{ $postList_1[$i]->title }}</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                            </div>
+                            @endfor
+                            <!-- Bai viet -->
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- End of Main Content -->
-
-        <!-- Footer -->
-        <footer class="sticky-footer bg-white">
-            <div class="container my-auto">
-                <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2021</span>
-                </div>
-            </div>
-        </footer>
-        <!-- End of Footer -->
-
+        <!-- Reject post -->
     </div>
-    <!-- End of Content Wrapper -->
+
+    
+
+</div>
+<!-- End of Main Content -->
+
+<!-- Footer -->
+<footer class="sticky-footer bg-white">
+    <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+            <span>Copyright &copy; Your Website 2021</span>
+        </div>
+    </div>
+</footer>
+<!-- End of Footer -->
+
+</div>
+<!-- End of Content Wrapper -->
 
 </div>
 <!-- End of Page Wrapper -->
