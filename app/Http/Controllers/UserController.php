@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\UpdateAccountRequest;
+use App\Http\Requests\UpdatePasswordRequest;
 use App\Models\Post;
 use App\Models\User;
 use Carbon\Carbon;
@@ -153,12 +155,11 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateAccountRequest $request, $id)
     {
         $user = User::find($id);
         if ($user != null) {
             $user->name = $request->name;
-            $user->phone = $request->phone;
             $user->address = $request->address;
             $user->save();
             toast('Cập nhật tài khoản thành công!', 'success');
@@ -185,7 +186,7 @@ class UserController extends Controller
         return view('account.edit_password', compact('user'));
     }
 
-    public function update_password(Request $request, $id)
+    public function update_password(UpdatePasswordRequest $request, $id)
     {
         if (Hash::check($request->password_old, Auth::user()->password)) {
             $user = User::find($id);
@@ -197,7 +198,8 @@ class UserController extends Controller
             toast('Cập nhật thành công!', 'success');
             return redirect()->route('trang-chu');
         }
-        toast('Cập nhật không thành công! Mật khẩu cũ không khớp', 'success');
+        toast('Cập nhật không thành công! Mật khẩu cũ không khớp', 'error');
+        return redirect()->route('tai-khoan.doi-mat-khau',['id' => $id]);
     }
 
     /**

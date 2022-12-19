@@ -134,7 +134,7 @@
                                                     @csrf
                                                     <label for="">Lí do bài đăng này bị từ chối:</label>
                                                     <div class="form-check">
-                                                        <input class="form-check-input" type="radio" name="message" value="Bài viết lừa đảo" id="flexCheckChecked" checked>
+                                                        <input class="form-check-input" type="radio" name="message" value="Nội dung bài viết không liên quan với hệ thống" id="flexCheckChecked" checked>
                                                         <label class="form-check-label" for="flexCheckChecked">
                                                             Nội dung bài viết không liên quan với hệ thống
                                                         </label>

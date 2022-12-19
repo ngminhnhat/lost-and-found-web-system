@@ -240,7 +240,7 @@
                                                     @csrf
                                                     <div class="form-group">
                                                         <label for="exampleInputEmail1">Tiêu đề</label>
-                                                        <input type="text" class="form-control" name="name" placeholder="{{ $itemType->name }}">
+                                                        <input type="text" class="form-control" name="name" placeholder="{{ $itemType->name }}" required>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary">Cập nhật</button>
                                                 </form>

@@ -214,7 +214,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($listPostType as $postType)
+                    @foreach($postListType as $postType)
                     <tr>
                         <th scope="row">{{ $postType->id }}</th>
 
@@ -240,7 +240,7 @@
                                                     @csrf
                                                     <div class="form-group">
                                                         <label for="exampleInputEmail1">Tiêu đề</label>
-                                                        <input type="text" class="form-control" name="name" placeholder="{{ $postType->name }}">
+                                                        <input type="text" class="form-control" name="name" placeholder="{{ $postType->name }}" required>
                                                     </div>
                                                     <button type="submit" class="btn btn-primary">Cập nhật</button>
                                                 </form>
